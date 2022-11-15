@@ -8,17 +8,48 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+class WeatherViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
-    
+    @IBOutlet weak var searchTextField: UITextField!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        searchTextField.delegate = self
     }
 
+    @IBAction func searchPressed(_ sender: UIButton) {
+        searchTextField.endEditing(true)
+        print(searchTextField.text!)
+    }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // executes when return is pressed
+        searchTextField.endEditing(true)
+        print(searchTextField.text!)
+        return true
+    }
+
+    // any textfield methods with should in the name asks for permission, hence why they return a Bool
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        // this method is good for validating user input
+        // it prevents the user from ending editing, dismissing keyboard etc if their input is not valid
+        if textField.text != "" {
+            return true
+        } else {
+            textField.placeholder = "Type something here"
+            return false
+        }
+    }
+
+    // by inheriting from UITextFieldDelegate, the view controller is notified when text field ends editing etc
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // this method executes when user stops editing text field
+        // use searchTextField.text to get the weather for that city
+        searchTextField.text = ""
+    }
 }
 
